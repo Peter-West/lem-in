@@ -21,6 +21,8 @@ typedef struct		s_room
 	int				y;
 	int				free;
 	int				start_end;
+	int				visited;
+	struct s_room	*parent;
 	t_list			*link;
 }					t_room;
 
@@ -39,11 +41,15 @@ typedef struct		s_env
 	int				ants_nb;
 	t_list			*rooms;
 	t_list			*read;
+	t_list			*path;
 }					t_env;
 
 void		parser(t_env *e);
 void		ft_error(char *s);
 void		add_to_list(t_list **list, void *data);
+void		pop_first_elem(t_list **list);
 int			solver(t_env *e);
+void		push_front(t_list **list, void *data);
+
 
 #endif

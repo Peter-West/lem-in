@@ -11,7 +11,7 @@
 #******************************************************************************#
 
 NAME				:= lem-in
-SRCS				:= main.c parser.c list.c solver.c
+SRCS				:= main.c parser.c list.c solver.c travel.c
 PATH_OBJ			:= objs
 PATH_SRC			:= srcs
 PATH_INC			:= incs

@@ -11,6 +11,7 @@ void	init(t_env *e)
 {
 	e->rooms = NULL;
 	e->read = NULL;
+	e->path = NULL;
 }
 
 int		main()
@@ -20,5 +21,6 @@ int		main()
 	init(&e);
 	parser(&e);
 	solver(&e);
+	travel(&e);
 	return (0);
 }

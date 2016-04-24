@@ -52,7 +52,6 @@ void		room_spec(t_env *e, char *line, int start_end)
 	t_room	*room;
 	char	**split;
 
-	// printf("start_end : %d, line : %s\n", start_end, line);
 	split = ft_strsplit(line, ' ');
 	check_pos_room(split);
 	room = (t_room*)malloc(sizeof(t_room));
@@ -62,18 +61,46 @@ void		room_spec(t_env *e, char *line, int start_end)
 	room->free = 0;
 	room->start_end = start_end;
 	room->link = NULL;
+	room->visited = 0;
+	room->parent = NULL;
 	add_to_list(&e->rooms, room);
 }
 
-t_room		*check_linked_rooms(t_env *e, char *name)
+int			check_already_linked(t_room *room, t_room *link_to_do)
 {
 	t_list	*tmp;
+
+	tmp = room->link;
+	while (tmp)
+	{
+		if ( ((t_link*)(tmp->data))->linked_rooms == link_to_do )
+		{
+			printf("Room deja reliee %p => %p\n", ((t_link*)(tmp->data))->linked_rooms, link_to_do);
+			return (1);
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+t_room		*check_linked_rooms(t_env *e, char *name, t_room *linked)
+{
+	t_list	*tmp;
+	t_link	*link;
 
 	tmp = e->rooms;
 	while (tmp)
 	{
 		if (!ft_strcmp(((t_room*)(tmp->data))->name, name))
+		{
+			if (!check_already_linked(((t_room*)(tmp->data)), linked))
+			{
+				link = (t_link*)malloc(sizeof(t_link));
+				link->linked_rooms = linked;
+				add_to_list(&((t_room*)(tmp->data))->link, link);
+			}
 			return (tmp->data);
+		}
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -92,8 +119,7 @@ void		link_spec(t_env *e, char *line)
 		if (!ft_strcmp(split[0], ((t_room*)(tmp_room->data))->name))
 		{
 			link = (t_link*)malloc(sizeof(t_link));
-			// link->linked_rooms = check_linked_rooms(e, ((t_room*)(tmp_room->data))->name);
-			link->linked_rooms = check_linked_rooms(e, split[1]);
+			link->linked_rooms = check_linked_rooms(e, split[1], tmp_room->data);
 			add_to_list(&((t_room*)(tmp_room->data))->link, link);
 		}
 		tmp_room = tmp_room->next;
@@ -131,7 +157,6 @@ void		parser(t_env *e)
 {
 	int			bool_start_end;
 	t_list		*tmp;
-	int			k = 0;
 
 	reader(e);
 	tmp = e->read;
@@ -139,7 +164,6 @@ void		parser(t_env *e)
 	tmp = tmp->next;
 	while (tmp)
 	{
-		printf("k: %d\n", k);
 		bool_start_end = 0;
 		if (LINE[1] && LINE[0] == '#' && LINE[1] == '#')
 		{
@@ -157,6 +181,5 @@ void		parser(t_env *e)
 		else if (bool_start_end == 0)
 			room_spec(e, LINE, ROOM);
 		tmp = tmp->next;
-		k++;
 	}
 }
