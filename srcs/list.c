@@ -11,6 +11,7 @@ void	add_to_list(t_list **list, void *data)
 	new_list = (t_list*)malloc(sizeof(t_list));
 	new_list->data = data;
 	new_list->next = NULL;
+	new_list->prev = NULL;
 	if (!(*list))
 		*list = new_list;
 	else
@@ -35,8 +36,15 @@ void	push_front(t_list **list, void *data)
 	new_elem = (t_list*)malloc(sizeof(t_list));
 	new_elem->data = data;
 	if (*list)
+	{
+		new_elem->prev = NULL;
 		new_elem->next = *list;
+		new_elem->next->prev = new_elem;
+	}
 	else
+	{
 		new_elem->next = NULL;
+		new_elem->prev = NULL;
+	}
 	*list = new_elem;
 }

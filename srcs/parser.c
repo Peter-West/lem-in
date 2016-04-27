@@ -58,7 +58,7 @@ void		room_spec(t_env *e, char *line, int start_end)
 	room->name = ft_strdup(split[0]);
 	room->x = ft_atoi(split[1]);
 	room->y = ft_atoi(split[2]);
-	room->free = 0;
+	room->ant = -1;
 	room->start_end = start_end;
 	room->link = NULL;
 	room->visited = 0;

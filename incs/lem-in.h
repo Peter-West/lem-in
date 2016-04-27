@@ -12,6 +12,8 @@ typedef	struct		s_list
 {
 	void			*data;
 	struct s_list	*next;
+	struct s_list	*prev;
+
 }					t_list;
 
 typedef struct		s_room
@@ -19,7 +21,7 @@ typedef struct		s_room
 	char			*name;
 	int				x;
 	int				y;
-	int				free;
+	int				ant;
 	int				start_end;
 	int				visited;
 	struct s_room	*parent;
@@ -50,6 +52,6 @@ void		add_to_list(t_list **list, void *data);
 void		pop_first_elem(t_list **list);
 int			solver(t_env *e);
 void		push_front(t_list **list, void *data);
-
+int			travel(t_env *e);
 
 #endif
